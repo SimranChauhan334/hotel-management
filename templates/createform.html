@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <links rel="stylesheet" href="{% static 'index.css' %}"></links>
+    <title>Hotel Details</title>
+</head>   
+<body>
+    <h1>Hotel Details</h1>
+    <div class="form">
+        <form action="" method="POST">
+            {% csrf_token %}
+            
+            <label  for="hotel_name">Hotel Name:</label>
+            <input type="text" name="hotel_name" placeholder="Enter hotel name" required><br><br>
+
+            <label for="hotel_descriptions">Hotel Descriptions:</label>
+            <textarea name="hotel_descriptions" placeholder="Enter hotel descriptions" required></textarea><br><br>
+
+            <label for="hotel_location">Hotel Location:</label>
+            <input type="text" name="hotel_location" placeholder="Enter hotel location" required><br><br>
+
+            <label for="hotel_email">Hotel Email:</label>
+            <input type="email" name="hotel_email" placeholder="Enter hotel email" required><br><br>
+
+            <label for="hotel_phone_no">Hotel Phone No:</label>
+            <input type="text" name="hotel_phone_no" placeholder="Enter hotel phone number" required><br><br>
+
+            <label for="image">Upload Image;</label>
+            <input type="file" name="image"/><br><br>
+            
+
+            <input type="submit" value="Create">
+        </form>
+    </div>
+</body>
+</html>
+

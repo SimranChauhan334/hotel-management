@@ -1,0 +1,104 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Room</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <h2>Book a Room at {{ hotel.hotel_name }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="check_in">Check-in Date:</label>
+        <input type="date" name="check_in" required><br><br>
+
+        <label for="check_out">Check-out Date:</label>
+        <input type="date" name="check_out" required><br><br>
+
+        <label for="no_of_guest">Number of Guests:</label>
+        <input type="number" name="no_of_guest" required><br><br>
+
+        <label for="booking_date">Booking Date:</label>
+        <input type="date" name="booking_date" value="{{ today }}" required><br><br>
+
+        <label for="room">Select Room:</label>
+        <select name="room" required>
+            {% for room in rooms %}
+                <option value="{{ room.id }}">{{ room.room_number }}  - ${{ room.price_per_night }} / night</option>
+            {% empty %}
+                <option value="" disabled>No rooms available</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Book Now</button><br><br>
+    </form>
+
+    
+
+    
+    <a href="/booking_history/{{ hotel.id }}" class="history">View Booking History</a><br><br>
+
+    
+    <p><a href="{% url 'HomePage' %}">Back to Home</a></p>
+</body>
+</html>
+
+
+       
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Room</title>
+</head>
+<body>
+    <h2>Book a Room at {{ hotel.hotel_name }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="check_in">Check-in Date:</label>
+        <input type="date" name="check_in" required><br><br>
+
+        <label for="check_out">Check-out Date:</label>
+        <input type="date" name="check_out" required><br><br>
+
+        <label for="no_of_guest">Number of Guests:</label>
+        <input type="number" name="no_of_guest" required><br><br>
+
+        <label for="booking_date">Booking Date:</label>
+        <input type="date" name="booking_date" value="{{ today }}" required><br><br>
+
+        <label for="room">Select Room:</label>
+        <select name="room" required>
+            {% for room in rooms %}
+                <option value="{{ room.id }}">{{ room.room_number }} - {{ room.room_type }} - ${{ room.price_per_night }} / night</option>
+            {% empty %}
+                <option value="" disabled>No rooms available</option>
+            {% endfor %}
+        </select><br><br>
+
+        <button type="submit">Book Now</button><br><br>
+    </form>
+                <a href="/booking_history/{{ hotel_id }}" class="history">History</a>
+                
+            </button>
+        
+
+    </form>
+
+   
+    
+       
+    
+
+    <p><a href="{% url 'HomePage' %}">Back to Home</a></p>
+</body>
+</html>
+ -->

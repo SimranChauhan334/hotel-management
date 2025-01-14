@@ -1,0 +1,86 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>index for hotel page</title>
+
+</head>   
+    <div>
+        <div style="display: flex; flex-flow: row; justify-content: space-between; align-items: center; background-color: palevioletred;padding: 10px;color: white">
+            {% if user.is_authenticated %}
+                {% if user.profile.is_vendor %}
+                    <a href="/create/{{ hotel.id }}" style="color: white">
+                    Create Hotel
+                    </a>
+                {% endif %}    
+                <a href="/profile/{{ hotel.id }}" style="color:white">Profile</a>
+               
+                <a href="/booking_history/{{ hotel.id }}" class="history">History</a>
+                
+                
+               <a href="/createuser/{{ hotel.id }}" style="color:rgb(111, 58, 20);">createuser</a>
+
+               <a href="/logout/{{ hotel.id }}" style="color: rgb(130, 62, 14);">Logout</a>
+                
+            {% else %}
+
+               <a href="/login/{{ hotel.id }}" style="color:rgb(162, 80, 22);">Login</a>  
+       
+            {% endif %} 
+
+    </div>
+    
+
+    <div>
+        
+    </div>
+    
+
+    <h1>HOTEL LIST</h1>
+
+
+    <div class="hotel-list">
+        {% for hotel in hotel %}
+            <div class="hotel-item">
+                
+                <div class="image-item">
+                    {% if hotel.hotel_image %}
+                        <img src="{{ hotel.hotel_image.url }}" alt="{{ hotel.hotel_name }}" style="max-width: 200px; height: auto;">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                </div>
+
+
+                <div class="content">
+                    <div>
+                        <h2>
+                            <a href="/detail/{{ hotel.id }}">{{ hotel.hotel_name }}</a>
+                        </h2>
+                    </div>
+
+                    <div class="last-content">
+                        <p>{{ hotel.hotel_location }}</p>
+                    </div>
+
+                </div>
+
+                
+                
+
+                
+                
+                
+                
+            </div>
+        {% endfor %}
+    </div>
+    
+
+</body>
+</html>    
+

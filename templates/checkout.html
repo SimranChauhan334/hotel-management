@@ -1,0 +1,41 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - {{ book.hotel.hotel_name }}</title>
+</head>
+<body>
+    <h1>Checkout for Booking at {{ book.hotel.hotel_name }}</h1>
+
+    <p><strong>Customer Name:</strong> {{ book.customer.user.first_name }} {{ book.customer.user.last_name }}</p>
+    <p><strong>Hotel Name:</strong> {{ book.hotel.hotel_name }}</p>
+    <p><strong>Room Number:</strong> {{ book.room.room_number }} ({{ book.room.room_type }})</p>
+    <p><strong>Check-in Date:</strong> {{ book.check_in }}</p>
+    <p><strong>Check-out Date:</strong> {{ book.check_out }}</p>
+    <p><strong>Number of Guests:</strong> {{ book.number_of_guest }}</p>
+    <p><strong>Booking Date:</strong> {{ book.booking_date }}</p>
+
+    <h2>Confirm Checkout</h2>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- <label for="payment_method">Select Payment Method:</label>
+        <select id="payment_method" name="payment_method">
+            <option value="credit_card">Credit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="bank_transfer">Bank Transfer</option>
+        </select><br><br>
+
+        <label for="payment_amount">Amount to Pay:</label>
+        <input type="text" id="payment_amount" name="payment_amount" value="{{ book.room.price_per_night|floatformat:2 }}" readonly><br><br> -->
+
+        <button type="submit">Complete Checkout</button>
+    </form>
+
+    <a href="{% url 'HomePage' %}">Back to Home</a>
+</body>
+</html>
+ 

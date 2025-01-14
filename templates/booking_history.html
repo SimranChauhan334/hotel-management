@@ -1,0 +1,126 @@
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ hotel.hotel_name }} Booking History</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Booking History for {{ hotel.hotel_name }}</h1>
+        <p><strong>Location:</strong> {{ hotel.hotel_location }}</p>
+        <p><strong>Description:</strong> {{ hotel.hotel_descriptions }}</p>
+
+        <h2>Booking List</h2>
+        {% if hotel_bookings %}
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Customer Name</th>
+                        <th>Booking Date</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                        <th>Status</th>
+                        <th>Room Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in hotel_bookings %}
+                        <tr>
+                            <td>{{ booking.id }}</td>
+                            <td>{{ booking.customer.user.first_name }} {{ booking.customer.user.last_name }}</td>
+                            <td>{{ booking.booking_date }}</td>
+                            <td>{{ booking.check_in }}</td>
+                            <td>{{ booking.check_out }}</td>
+                            <td>{{ booking.status }}</td>
+
+                            
+                            <td>
+                                {% if booking.room %}
+                                    <p>Room: {{ booking.room.room_number }}</p>
+                                {% else %}
+                                    <p>No room assigned</p>
+                                {% endif %}
+                            </td>
+
+                            
+                            <td>
+                                {% if booking.status != 'completed' %}
+                                    <a href="/checkout/{{ booking.id }}" class="checkout-button">Checkout</a>
+                                {% else %}
+                                    <p>Completed</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No bookings found for this hotel.</p>
+        {% endif %}
+    </div>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1em;
+        }
+
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .booking-table th, .booking-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .booking-table th {
+            background-color: #f2f2f2;
+        }
+
+        .booking-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .booking-table td {
+            font-size: 1em;
+        }
+    </style>
+
+</body>
+</html>
+
+
+

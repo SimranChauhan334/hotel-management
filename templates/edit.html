@@ -1,0 +1,50 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Hotel</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <div class="edit-form">
+        <h2>Are you sure you want to edit the hotel "{{ hotel.hotel_name }}"?</h2>
+
+        <form method="POST" enctype="multipart/form-data"> 
+            {% csrf_token %}             
+
+            <label for="hotel_name">Hotel Name:</label>
+            <input type="text" id="hotel_name" name="hotel_name" value="{{ hotel.hotel_name }}" required><br><br>
+
+            <label for="hotel_descriptions">Hotel Description:</label>
+            <textarea id="hotel_descriptions" name="hotel_descriptions" required>{{ hotel.hotel_descriptions }}</textarea><br><br>
+
+            <label for="hotel_location">Hotel Location:</label>
+            <input type="text" id="hotel_location" name="hotel_location" value="{{ hotel.hotel_location }}" required><br><br>
+
+            <label for="hotel_email">Hotel Email:</label>
+            <input type="email" id="hotel_email" name="hotel_email" value="{{ hotel.hotel_email }}" required><br><br>
+
+            <label for="hotel_phone_no">Phone Number:</label>
+            <input type="tel" id="hotel_phone_no" name="hotel_phone_no" value="{{ hotel.hotel_phone_no }}" required><br><br>
+
+            <label for="hotel_image">Choose an image:</label>
+            <input type="file" name="hotel_image" id="hotel_image">
+            
+            <br><br>
+
+            <button type="submit">Save Changes</button>
+        </form>
+
+        <br>
+
+        <a href="/detail/{{hotel.id}}">Cancel</a>
+    </div>
+
+</body>
+</html>
+

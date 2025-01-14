@@ -1,0 +1,13 @@
+
+
+
+<h1>Are you sure you want to delete the hotel: {{ hotel.hotel_name }}?</h1>
+<p>{{ hotel.hotel_descriptions }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Yes, delete it</button>
+</form>
+
+<br>
+<a href="/detail/{hotel.id}">Cancel</a> 

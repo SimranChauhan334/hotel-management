@@ -1,0 +1,35 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+
+    <div>
+        
+        <div>
+            <strong>First Name:</strong> {{ user.first_name }}
+        </div>
+
+        
+        <div>
+            <strong>Email:</strong> {{ user.email }}
+        </div>
+
+        
+        <div>
+            <strong>Vendor Status:</strong> 
+            {% if user.profile.is_vendor %}
+                Yes
+            {% else %}
+                No
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

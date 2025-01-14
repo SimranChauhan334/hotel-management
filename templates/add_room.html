@@ -1,0 +1,74 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Form</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <h1>Add Room</h1>
+
+    
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="form">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+           
+            <label for="room_number">Room Number</label>
+            <input type="number" name="room_number" id="room_number" placeholder="Enter the room number" required><br><br>
+
+           
+            <label for="room_type">Room Type</label>
+            <input type="text" name="room_type" id="room_type" placeholder="Enter the room type" required><br><br>
+
+            
+            <label for="price_per_night">Price</label>
+            <input type="number" name="price_per_night" id="price_per_night" placeholder="Enter the price" required><br><br>
+
+           
+            <label for="is_available">Availability</label>
+            <input type="text" name="is_available" id="is_available" placeholder="Enter Availability" required><br><br>
+
+            
+            <input type="hidden" name="hotel_id" value="{{ hotel.id }}">
+
+          
+            <label for="image">Upload Room Picture:</label><br>
+            <input type="file" id="image" name="image" multiple>  <br><br>
+
+            <button type="submit">Add Room</button>
+        </form>
+
+        <div> 
+        <form method="post" action="/delete_image/{{room.id}}">
+            {% csrf_token %}
+            <h1>Room images...</h1>
+            <div class="image-content">
+                {% for i in room.room_image_set.all %}
+                    {% if i.image %}
+                    <div>
+                        <img src="{{ i.image.url }}" alt="Room Image">
+                        <input type="checkbox" name="image" value="{{i.id}}"  />
+                    </div>    
+                    {% endif %}
+                {% endfor %}
+            </div>            
+            <input type="submit" value="Delete" />
+        </form>
+        </div>
+    </div>
+</body>
+</html>
+

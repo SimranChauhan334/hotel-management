@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Details for {{ hotel.hotel_name }}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+   
+</head>
+<body>
+    <div class="container">
+        <h2>Rooms in {{ hotel.hotel_name }}</h2>
+
+        <div class="rooms">
+            {% for r in Room %}
+                <div class="room-box">
+                    {% for i in r.room_image_set.all %}
+                    {% if i.image %}
+                        <img src="{{ i.image.url }}" alt="Room Image" style="max-width: 150px;">
+                    {% endif %}
+                    {% endfor %} 
+                    <h3><strong>room_number:</strong> {{ r.room_number }}</h3>
+                    <p><strong>Room Type:</strong> {{ r.room_type }}</p>
+                    <p><strong>Price per Night:</strong> ${{ r.price_per_night }}</p>
+                    <p><strong>Availability:</strong> {% if r.is_available %}Available{% else %}Not Available{% endif %}</p>
+                    <div class="room-image">
+                        
+                    </div>
+                    <a href="/book/{{ hotel.id }}" class="book-now-btn">Book Now</a>
+                    
+                    <a href="/edit_room/{{ r.id }}" class="edit_room-btn">Edit Room</a>
+                    
+
+                   
+                </div>
+            {% empty %}
+                <p>No available rooms in this hotel.</p>
+            {% endfor %}
+        </div>
+      
+        
+        
+        <p><a href="{% url 'HomePage' %}">Back to Home</a></p>
+    </div>
+</body>
+</html>
