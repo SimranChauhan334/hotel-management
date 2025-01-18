@@ -1,0 +1,14 @@
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <h3>Images for room {{ room.room_number }}</h3>
+    {% for image in images %}
+        <div>
+            <input type="checkbox" name="selected_image" value="{{ image.id }}">
+            <img src="{{ image.image.url }}" alt="Room Image" width="100">
+        </div>
+    {% endfor %}
+    
+    <button type="submit">Delete Selected Images</button>
+</form>

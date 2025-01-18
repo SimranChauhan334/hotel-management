@@ -2,56 +2,40 @@
 {% load static %}
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     
-    <div class="form-group">
-        <label for="room_number">Room Number:</label>
-        <input type="text" class="form-control" id="room_number" name="room_number" value="{{ room.room_number }}" required>
-        <link rel="stylesheet" href="{% static 'style.css' %}">
-    </div>
+   
+    <label for="room_number">Room Number:</label>
+    <input type="text" id="room_number" name="room_number" value="{{ room.room_number }}" required><br>
+    
+    <label for="room_type">Room Type:</label>
+    <input type="text" id="room_type" name="room_type" value="{{ room.room_type }}" required><br>
+    
+    <label for="price_per_night">Price per Night:</label>
+    <input type="text" id="price_per_night" name="price_per_night" value="{{ room.price_per_night }}" required><br>
+    
+    <label for="is_available">Available:</label>
+    <input type="checkbox" id="is_available" name="is_available" {% if room.is_available %}checked{% endif %}><br>
 
-    <div class="form-group">
-        <label for="room_type">Room Type:</label>
-        <select class="form-control" id="room_type" name="room_type" required>
-            <option value="Single" {% if room.room_type == "Single" %}selected{% endif %}>Single</option>
-            <option value="Double" {% if room.room_type == "Double" %}selected{% endif %}>Double</option>
-            <option value="Suite" {% if room.room_type == "Suite" %}selected{% endif %}>Suite</option>
-        </select>
-    </div>
+   
+    <h3>Existing Images</h3>
+    {% for image in room_images %}
+        <div>
+            <img src="{{ image.image.url }}" alt="Room Image" width="100">
+            <label for="delete_image_{{ image.id }}">Delete this image</label>
+            <input type="checkbox" name="delete_image" value="{{ image.id }}" id="delete_image_{{ image.id }}">
 
-    <div class="form-group">
-        <label for="price">Price per Night:</label>
-        <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ room.price_per_night }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="availability">Availability:</label>
-        <select class="form-control" id="availability" name="availability" required>
-            <option value="True" {% if room.is_available %}selected{% endif %}>Available</option>
-            <option value="False" {% if not room.is_available %}selected{% endif %}>Not Available</option>
-        </select>
-    </div>
-
-    <!-- Show existing images for editing -->
-    <div class="form-group">
-        <label for="room_image">Select Image to Edit:</label>
-        <div class="image-selection">
-            {% for image in room.room_image_set.all %}
-                <div>
-                    <img src="{{ image.image.url }}" alt="Room Image" style="width: 150px; height: auto;">
-                    <label>
-                        <input type="radio" name="selected_image" value="{{ image.id }}" {% if forloop.first %}checked{% endif %}>
-                        Edit this image
-                    </label>
-                </div>
-            {% endfor %}
+           
+            <label for="edit_image_{{ image.id }}">Edit this image</label>
+            <input type="radio" name="edit_image" value="{{ image.id }}" id="edit_image_{{ image.id }}">
         </div>
-    </div>
+    {% endfor %}
 
-    <!-- Upload a new image -->
-    <div class="form-group">
-        <label for="room_image">Upload New Image:</label>
-        <input type="file" class="form-control" id="room_image" name="room_image" accept="image/*">
-    </div>
+   
+    <h3>Upload New Image to Replace Selected One</h3>
+    <input type="file" name="new_image" {% if not room_images %}disabled{% endif %}><br>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+  
+    <button type="submit">Save Changes</button>
 </form>
+

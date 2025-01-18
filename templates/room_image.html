@@ -1,4 +1,5 @@
 
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,33 +7,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Room Image</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
 
-    <h2>Upload Image for Room {{ Room.room_number }}</h2>
+    <h2>Upload Image for Room {{ room.room_number }}</h2>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
-        <p>Current Room Images:</p>
-        {% if Room.room_image_set.all %}
-            {% for image in Room.room_image_set.exists %}
-                <img src="{{ image.image.url }}" alt="Room Image" width="200"><br><br>
-                <a href="{% url 'delete_room_image' image.id %}">Delete Image</a><br><br>
-            {% endfor %}
-        {% else %}
-            <p>No images available.</p>
-        {% endif %}
-
-        <label for="room_image">Choose an image:</label>
-        <input type="file" name="photo" accept="image/*" required><br><br>
+        <label for="image">Choose an image:</label>
+        <input type="file" name="image" accept="image/*" required><br><br>
 
         <button type="submit">Upload Image</button>
     </form>
 
-    <p><a href="{% url 'HomePage' %}">Back to Home</a></p>
+    <p><a href="{% url 'room_details' id=room.hotel.id %}">Back to Room Details</a></p>
+    <h3>Room Images</h3>
+        {% if room.room_image_set.all %}
+            {% for image in room.room_image_set.all %}
+                <img src="{{ image.image.url }}" alt="Room Image" width="200"><br>
+            {% endfor %}
+        {% else %}
+            <p>No images available for this room.</p>
+        {% endif %}
+    
+
 
 </body>
 </html>
 
 
+
+
+ 

@@ -5,8 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from datetime import datetime
-from django.db import transaction
-from django.db.utils import IntegrityError
 
 
 
@@ -26,7 +24,6 @@ def Room_details(request,id):
     room = Room.objects.filter(hotel=Hotel, is_available=True)
     # print(f"Rooms available for hotel {Hotel.hotel_name}: {room}")
     return render(request,"room_details.html",{'Room': room, 'hotel':Hotel})
-
 
 
 
@@ -155,7 +152,7 @@ def Booking(request, id):
             check_out__gt=check_in_date
         )
 
-        if overlapping_bookings.exists():
+        if overlapping_bookings.exists:
             messages.error(request, "This room is already booked for the selected dates.")
             return redirect('book_room', id=Hotel.id)
         
@@ -243,36 +240,83 @@ def add_room(request, id):
     return render(request, "add_room.html", {'hotel': Hotel})
 
 
+@login_required(login_url='/Userlogin')
+def edit_room(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+
+    if request.method == 'POST':
+       
+        room.room_number = request.POST['room_number']
+        room.room_type = request.POST['room_type']
+        room.price_per_night = request.POST['price_per_night']
+        room.is_available = request.POST['is_available'] == 'on'  # Ensure it's a boolean
+
+       
+        if 'edit_image' in request.POST:
+            image_id_to_edit = request.POST.get('edit_image')
+            new_image = request.FILES.get('new_image')
+
+            if image_id_to_edit and new_image:
+                try:
+                   
+                    image_to_edit = room_image.objects.get(id=image_id_to_edit)
+
+                   
+                    image_to_edit.image = new_image
+                    image_to_edit.save()
+
+                    messages.success(request, "Image updated successfully.")
+
+                except room_image.DoesNotExist:
+                    messages.error(request, "The selected image doesn't exist.")
+
+       
+        if 'delete_image' in request.POST:
+            selected_images_to_delete = request.POST.getlist("delete_image")
+            if selected_images_to_delete:
+                room_image.objects.filter(id__in=selected_images_to_delete).delete()
+
+        room.save()
+
+        messages.success(request, "Room details updated successfully.")
+        return redirect('room_details', id=room.hotel.id)  # Redirect to the room details page
+
+   
+    room_images = room.room_image_set.all()
+
+    return render(request, 'room_edit.html', {'room': room, 'room_images': room_images})
 
 
+
+@login_required(login_url='/Userlogin')
 def delete_image(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     images = room.room_image_set.all()
-    print(f"Room: {room.room_number} - Images: {images.count()}")
 
     if request.method == "POST":
-        selected_image = request.POST.getlist("selected_image")
-        print(f"Selected images: {selected_image}")
-        if selected_image:
-            print(f"Deleting images with IDs: {selected_image}")
-            room_image.objects.filter(id__in=selected_image).delete() 
-            return redirect('room_details', room_id=room.id)
+        selected_image_ids = request.POST.getlist("selected_image")
+        
+        if selected_image_ids:
+            room_image.objects.filter(id__in=selected_image_ids).delete()
+            messages.success(request, "Selected images deleted successfully.")
+            return redirect('room_details', id=room.id)
 
-    return render(request, 'delete_room.html', {'room': room, 'images': images})
+    return render(request, 'delete_image.html', {'room': room, 'images': images})
 
 
-def upload_image(request,id):
-    room = Room.objects.get(Room,id,id)
-    if request.method == 'POST':
-        form = room_image(request.POST, request.FILES)
+def upload_image(request, id):
+    room = get_object_or_404(Room, id=id)
 
-        if form.is_valid():
-          image = form.save(commit=False)
-          image.room = room
-          image.save()
-          return redirect('room_details', id=room.hotel.id)
-    return render(request, 'upload_image.html', {'form': form, 'room': room})  
-           
+    if request.method == 'POST' and request.FILES.getlist('image'): 
+        image_files = request.FILES.getlist('image') 
+
+        
+        for image_file in image_files:
+            room_image.objects.create(room=room, image=image_file)
+
+        return redirect('room_details', id=room.hotel.id) 
+
+    return render(request, 'room_image.html', {'room': room})
 
 def userlogin(request):
     if request.method == "POST":
@@ -304,7 +348,7 @@ def createuser(request):
         password = request.POST['password']
         email = request.POST['email']
         phone_no = request.POST['phone_number']
-        is_vendor = request.POST['is_vendor' ] == 'on'
+        is_vendor = request.POST['is_vendor' ]
         # profile_img = request.FILES['image']
 
         if User.objects.filter(username=username).exists():

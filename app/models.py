@@ -43,7 +43,7 @@ class Book(models.Model):
         ('completed', 'completed'),
         ('cancelled', 'cancelled'),
     ]
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)   
     hotel = models.ForeignKey(hotel, on_delete=models.CASCADE)  
     room = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
     check_in = models.DateField() 
